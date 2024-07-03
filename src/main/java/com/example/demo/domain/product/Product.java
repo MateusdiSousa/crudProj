@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
 
 @Table(name="product")
 @Entity(name="product")
@@ -29,6 +28,14 @@ public class Product {
 	
 	public Integer getPrice() {
 		return this.price_in_cents;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setPrice(Integer price) {
+		this.price_in_cents = price;
 	}
 	
 	public Product(ProductDto dto) {
