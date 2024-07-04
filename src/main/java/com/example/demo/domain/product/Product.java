@@ -18,6 +18,8 @@ public class Product {
 		
 	private Integer price_in_cents;
 	
+	private Boolean active = true;
+	
 	public String getName() {
 		return this.name;
 	}
@@ -30,12 +32,20 @@ public class Product {
 		return this.price_in_cents;
 	}
 	
+	public Boolean getActive() {
+		return this.active;
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
 	
 	public void setPrice(Integer price) {
 		this.price_in_cents = price;
+	}
+	
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 	
 	public Product(ProductDto dto) {

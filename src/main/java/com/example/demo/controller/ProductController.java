@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,13 +33,14 @@ public class ProductController {
 	
 	@GetMapping
 	public ResponseEntity<List<Product>> getAllProducts(){	
-		List<Product> products = productRepository.findAll();
+		List<Product> products = productRepository.findAllByActiveTrue();
 		return ResponseEntity.ok(products);
 	}
 	
 	@PostMapping
 	public ResponseEntity<Product> createProduct( @RequestBody @Validated ProductDto data) {
 		Product product = new Product(data);
+		product.setActive(true);
 		productRepository.save(product);
 		return ResponseEntity.ok(product);
 	}
@@ -57,10 +59,18 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<String> deleteProduct(@RequestParam String id) {
-		productRepository.deleteById(id);
-		return ResponseEntity.ok("Deletado com sucesso!");
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<String> deleteProduct(@PathVariable String id) {
+		Optional<Product> response = productRepository.findById(id);
+		
+		if(response.isPresent()) {
+			Product product = response.get();
+			product.setActive(false);
+			return ResponseEntity.noContent().build();
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 }
 
